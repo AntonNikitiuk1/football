@@ -1,0 +1,49 @@
+<!-- activity_listview.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="409dp"
+    android:layout_height="729dp"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginEnd="-2dp"
+    android:layout_marginBottom="-3dp"
+    android:background="@drawable/flag_of_ukraine">
+
+    <EditText
+        android:id="@+id/find_field"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="84dp"
+        android:layout_marginBottom="513dp"
+        android:ems="10"
+        android:hint="Пошук по імені команди"
+        android:inputType="textPersonName"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/btn_find"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="411dp"
+        android:text="Пошук"
+        android:textColor="#0057b8" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
+        android:layout_height="168dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="411dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="80dp"
+        android:cacheColorHint="#FFEB3B" />
+
+</RelativeLayout>

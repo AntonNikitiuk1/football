@@ -1,49 +1,62 @@
 package com.example.football;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CreateMatchResultActivity extends AppCompatActivity {
-
+public class CreateMatchResultFragment extends Fragment implements View.OnClickListener {
     private MatchResultsDataSource dataSource;
+    private EditText command1EditText;
+    private EditText command2EditText;
+    private EditText command1ResultEditText;
+    private EditText command2ResultEditText;
+    public CreateMatchResultFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_match_result);
-        dataSource = new MatchResultsDataSource(this);
+        dataSource = new MatchResultsDataSource(requireContext());
         dataSource.open();
-
-        final EditText command1EditText = findViewById(R.id.command1);
-        final EditText command2EditText = findViewById(R.id.command2);
-        final EditText command1ResultEditText = findViewById(R.id.command1_result);
-        final EditText command2ResultEditText = findViewById(R.id.command2_result);
-
-        Button createButton = findViewById(R.id.btn_create_form);
+        View view = inflater.inflate(R.layout.create_match_result_fragment, container, false);
+        command1EditText = view.findViewById(R.id.command1);
+        command2EditText = view.findViewById(R.id.command2);
+        command1ResultEditText = view.findViewById(R.id.command1_result);
+        command2ResultEditText = view.findViewById(R.id.command2_result);
+        Button createButton = view.findViewById(R.id.btn_create_form);
         createButton.setBackgroundTintList(getResources().getColorStateList(R.color.yellow));
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        createButton.setOnClickListener(this);
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_create_form:
                 String command1 = command1EditText.getText().toString();
                 String command2 = command2EditText.getText().toString();
                 String command1ResultStr = command1ResultEditText.getText().toString();
                 String command2ResultStr = command2ResultEditText.getText().toString();
                 String currentDate = getCurrentDate();
 
-
                 if (TextUtils.isEmpty(command1) || TextUtils.isEmpty(command2) ||
                         TextUtils.isEmpty(command1ResultStr) || TextUtils.isEmpty(command2ResultStr)) {
-                    Toast.makeText(CreateMatchResultActivity.this, "Заповніть усі поля", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Заповніть усі поля", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int command1Result, command2Result;
@@ -52,21 +65,22 @@ public class CreateMatchResultActivity extends AppCompatActivity {
                     command1Result = Integer.parseInt(command1ResultStr);
                     command2Result = Integer.parseInt(command2ResultStr);
                 } catch (NumberFormatException e) {
-                    Toast.makeText(CreateMatchResultActivity.this, "Невірний формат числа", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Невірний формат числа", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 dataSource.addMatchResult(command1, command2, command1Result, command2Result, currentDate);
-                Toast.makeText(CreateMatchResultActivity.this, "Результати додано до бази даних", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Результати додано до бази даних", Toast.LENGTH_SHORT).show();
                 command1EditText.setText("");
                 command2EditText.setText("");
                 command1ResultEditText.setText("");
                 command2ResultEditText.setText("");
-            }
-        });
+                break;
+        }
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         dataSource.close();
     }

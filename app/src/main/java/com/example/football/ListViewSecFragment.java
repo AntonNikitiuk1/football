@@ -1,18 +1,22 @@
 package com.example.football;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListViewActivity extends AppCompatActivity {
+public class ListViewSecFragment extends Fragment implements View.OnClickListener
+{
 
     private ListView listView;
     private MatchResultsDataSource dataSource;
@@ -20,24 +24,35 @@ public class ListViewActivity extends AppCompatActivity {
     private Button btnFind;
     private ArrayAdapter<String> adapter;
 
+    public ListViewSecFragment()
+    {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_view);
-
-        listView = findViewById(R.id.listView);
-        findField = findViewById(R.id.find_field);
-        btnFind = findViewById(R.id.btn_find);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.list_view_fragment, container, false);
+        listView = view.findViewById(R.id.listView);
+        findField = view.findViewById(R.id.find_field);
+        btnFind = view.findViewById(R.id.btn_find);
         btnFind.setBackgroundTintList(getResources().getColorStateList(R.color.yellow));
-
-        dataSource = new MatchResultsDataSource(this);
+        btnFind.setOnClickListener(this);
+        dataSource = new MatchResultsDataSource(requireContext());
 
         displayAllMatchResults();
 
-        btnFind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        return view;
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.btn_find:
+                MainActivity mainActivity = (MainActivity)getActivity();
                 String searchTerm = findField.getText().toString().trim();
 
                 if (!searchTerm.isEmpty()) {
@@ -46,9 +61,10 @@ public class ListViewActivity extends AppCompatActivity {
                 } else {
                     displayAllMatchResults();
                 }
-            }
-        });
+                break;
+        }
     }
+
 
     private void displayAllMatchResults() {
         List<Result> matchResults = dataSource.getListMatch();
@@ -62,7 +78,7 @@ public class ListViewActivity extends AppCompatActivity {
             resultList.add(item);
         }
         adapter = new ArrayAdapter<>(
-                this,
+                requireContext(),
                 android.R.layout.simple_list_item_1,
                 resultList
         );

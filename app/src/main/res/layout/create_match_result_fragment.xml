@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/flag_of_ukraine"
-    tools:context=".MainActivity">
+    tools:context=".CreateMatchResultFragment">
 
     <RelativeLayout
         android:layout_width="409dp"
